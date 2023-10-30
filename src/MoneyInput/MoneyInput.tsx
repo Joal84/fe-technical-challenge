@@ -1,4 +1,4 @@
-import React, { useRef, useState, ChangeEvent, FocusEvent } from 'react'
+import React, { useRef, useState, FocusEvent } from 'react'
 import _styles from './MoneyInput.module.css'
 
 interface MoneyInputProps {
@@ -7,45 +7,50 @@ interface MoneyInputProps {
   disabled: boolean
 }
 
-const convertToCents = (value: string): number => {
-  const numericValue = parseFloat(value.replace(/[^\d.]/g, ''))
-  return Math.round(numericValue * 100)
-}
-
 const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputValue, setInputValue] = useState<string>('')
   const [rawValue, setRawValue] = useState<string>('')
   const [isValid, setIsValid] = useState(true)
 
+  const convertToCents = (value: string): number => {
+    let normalizedValue = value
+
+    normalizedValue = normalizedValue.replace(',', '.')
+
+    const valueNumber = parseFloat(normalizedValue.replace(/[^\d.]/g, ''))
+    return Math.round(valueNumber * 100)
+  }
+
   const formatToCurrency = (value: string) => {
-    const numericalValue = parseFloat(value)
-    if (isNaN(numericalValue)) return ''
+    const valueNumber = parseFloat(value)
+    if (isNaN(valueNumber)) return ''
 
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'EUR',
-    }).format(numericalValue)
+      useGrouping: false,
+    }).format(valueNumber)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    const generalRegex = /^[\d.,€$£\s]+$/
+    const pattern = /^[\d.,€$£\s]+$/
 
-    const isValueValid = generalRegex.test(value)
+    const isValueValid = pattern.test(value)
 
     setIsValid(isValueValid)
 
-    const numericalValue = value.replace(/[^\d]/g, '')
+    const valueNumber = value.replace(/[^\d]/g, '')
 
-    if (numericalValue === '') {
+    if (valueNumber === '') {
       setRawValue('')
       setInputValue('')
       return
     }
 
-    setRawValue(numericalValue)
-    const formattedValue = formatToCurrency((parseInt(numericalValue) / 100).toString())
+    setRawValue(valueNumber)
+    const formattedValue = formatToCurrency((parseInt(valueNumber) / 100).toString())
     setInputValue(formattedValue)
   }
 
@@ -64,7 +69,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
       inputRef.current.value = formattedValue
     }
   }
-  console.log(isValid)
+
   return (
     <form className={_styles.container}>
       <label htmlFor="moneyInput" className={_styles.labelInput}>
@@ -78,7 +83,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
           type="text"
           className={`${_styles.fieldInput} ${!isValid ? _styles.invalid : ''}`}
           id="moneyInput"
-          onChange={handleInputChange}
+          onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
           value={inputValue}

@@ -10,7 +10,7 @@
 }
 .fieldInput {
   font: var(--betterplace-typography-base);
-  max-width: 300px;
+  width: var(--betterplace-sizing-fix-1);
   border: 1px solid var(--betterplace-color-gray-400);
   border-radius: 3px;
   padding: 8px;
@@ -29,7 +29,7 @@
   font: var(--betterplace-typography-base);
   color: var(--betterplace-color-gray-400);
   background-color: var(--betterplace-color-gray-100);
-  max-width: 300px;
+  width: var(--betterplace-sizing-fix-1);
   border: 1px solid var(--betterplace-color-gray-400);
   border-radius: 3px;
   padding: 8px;

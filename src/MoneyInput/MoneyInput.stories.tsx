@@ -28,7 +28,7 @@ type StoryWithArgs = ((args: InputArgs) => JSX.Element) & { args?: InputArgs }
 export const Default: StoryWithArgs = inputArgs.bind({})
 
 Default.args = {
-  label: 'Currency',
-  locale: 'de',
+  label: 'Amount',
+  locale: 'en',
   disabled: false,
 }
