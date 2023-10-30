@@ -15,14 +15,13 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
 
   const convertToCents = (value: string): number => {
     let normalizedValue = value
-
     normalizedValue = normalizedValue.replace(',', '.')
 
     const valueNumber = parseFloat(normalizedValue.replace(/[^\d.]/g, ''))
     return Math.round(valueNumber * 100)
   }
 
-  const formatToCurrency = (value: string) => {
+  const formatToCurrency = (value: string): string => {
     const valueNumber = parseFloat(value)
     if (isNaN(valueNumber)) return ''
 
@@ -33,7 +32,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
     }).format(valueNumber)
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value
     const pattern = /^[\d.,€$£\s]+$/
 
@@ -62,7 +61,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
     e.target.value = intValue.toString()
   }
 
-  const handleFocus = (e: FocusEvent<HTMLInputElement>): void => {
+  const handleFocus = (): void => {
     if (inputRef.current) {
       const formattedValue = formatToCurrency((parseInt(rawValue) / 100).toString())
       inputRef.current.value = formattedValue
@@ -71,7 +70,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
 
   return (
     <form className={_styles.container}>
-      <label htmlFor="moneyInput" className={_styles.labelInput}>
+      <label htmlFor={`${label}-input`} className={_styles.labelInput}>
         {label}
       </label>
       {disabled ? (
@@ -81,7 +80,8 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
           ref={inputRef}
           type="text"
           className={`${_styles.fieldInput} ${!isValid ? _styles.invalid : ''}`}
-          id="moneyInput"
+          id={`${label}-input`}
+          name={`${label}-input`}
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
