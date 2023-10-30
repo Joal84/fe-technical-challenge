@@ -38,7 +38,6 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
     const pattern = /^[\d.,€$£\s]+$/
 
     const isValueValid = pattern.test(value)
-
     setIsValid(isValueValid)
 
     const valueNumber = value.replace(/[^\d]/g, '')
