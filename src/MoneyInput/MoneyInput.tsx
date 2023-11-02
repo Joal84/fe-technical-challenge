@@ -72,7 +72,14 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
         {label}
       </label>
       {disabled ? (
-        <input value={inputValue} type="text" className={_styles.fieldDisabledInput} id="moneyInput" readOnly />
+        <input
+          value={inputValue}
+          type="text"
+          className={_styles.fieldDisabledInput}
+          id={`${label}-input`}
+          name={`${label}-input`}
+          readOnly
+        />
       ) : (
         <input
           type="text"
