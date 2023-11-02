@@ -1,4 +1,4 @@
-import React, { useRef, useState, FocusEvent } from 'react'
+import React, { useState, FocusEvent } from 'react'
 import _styles from './MoneyInput.module.css'
 
 interface MoneyInputProps {
@@ -8,7 +8,6 @@ interface MoneyInputProps {
 }
 
 const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
-  const inputRef = useRef<HTMLInputElement>(null)
   const [inputValue, setInputValue] = useState<string>('')
   const [rawValue, setRawValue] = useState<string>('')
   const [isValid, setIsValid] = useState(true)
@@ -57,14 +56,13 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
 
     const intValue = convertToCents(e.target.value)
     console.log(` ${intValue}`)
-
-    e.target.value = intValue.toString()
+    setInputValue(intValue.toString())
   }
 
-  const handleFocus = (): void => {
-    if (inputRef.current) {
+  const handleFocus = (e: FocusEvent<HTMLInputElement>): void => {
+    if (e.target.value) {
       const formattedValue = formatToCurrency((parseInt(rawValue) / 100).toString())
-      inputRef.current.value = formattedValue
+      setInputValue(formattedValue)
     }
   }
 
@@ -77,7 +75,6 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
         <input value={inputValue} type="text" className={_styles.fieldDisabledInput} id="moneyInput" readOnly />
       ) : (
         <input
-          ref={inputRef}
           type="text"
           className={`${_styles.fieldInput} ${!isValid ? _styles.invalid : ''}`}
           id={`${label}-input`}
