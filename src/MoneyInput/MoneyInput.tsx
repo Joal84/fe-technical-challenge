@@ -17,7 +17,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
     normalizedValue = normalizedValue.replace(',', '.')
 
     const valueNumber = parseFloat(normalizedValue.replace(/[^\d.]/g, ''))
-    return Math.round(valueNumber * 100)
+    return valueNumber * 100
   }
 
   const formatToCurrency = (value: string): string => {
@@ -55,7 +55,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({ locale, label, disabled }) => {
     if (!e.target.value) return
 
     const intValue = convertToCents(e.target.value)
-    console.log(` ${intValue}`)
+    console.log(intValue)
     setInputValue(intValue.toString())
   }
 
